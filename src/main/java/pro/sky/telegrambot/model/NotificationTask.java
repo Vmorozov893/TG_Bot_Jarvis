@@ -11,15 +11,30 @@ public class NotificationTask {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "chatid")
+    private long chatId;
+
     @Column(name = "datetime")
     private LocalDateTime dateTime;
 
     @Column(name = "message")
     private String message;
 
-    public NotificationTask(LocalDateTime dateTime, String message) {
+    public NotificationTask() {
+    }
+
+    public NotificationTask(long chatId, LocalDateTime dateTime, String message) {
+        this.chatId = chatId;
         this.dateTime = dateTime;
         this.message = message;
+    }
+
+    public long getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(long chatId) {
+        this.chatId = chatId;
     }
 
     public Long getId() {
@@ -48,10 +63,7 @@ public class NotificationTask {
 
     @Override
     public String toString() {
-        return "NotificationTask{" +
-                "id=" + id +
-                ", dateTime=" + dateTime +
-                ", message='" + message + '\'' +
-                '}';
+        return message + " в " + dateTime.getHour()+":"+dateTime.getMinute()+" "
+                +dateTime.getDayOfMonth()+"."+dateTime.getMonthValue()+"."+dateTime.getYear();
     }
 }
