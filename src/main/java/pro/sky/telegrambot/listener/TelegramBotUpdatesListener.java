@@ -7,12 +7,14 @@ import com.pengrad.telegrambot.request.SendMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.service.BotService;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-
 
 
 @Service
@@ -22,6 +24,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
     @Autowired
     private TelegramBot telegramBot;
+    @Autowired
+    private BotService service;
 
     @PostConstruct
     public void init() {
@@ -34,23 +38,80 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             logger.info("Processing update: {}", update);
             String messageText = update.message().text();
             long chatId = update.message().chat().id();
-            switch (messageText){
+            switch (messageText) {
                 case "/start":
                     startCommandReceived(chatId, update.message().chat().firstName());
                     break;
                 default:
+                    if (messageText.matches("Иди нахуй")){
+                        sendMessage(chatId, "__000000___00000 \n" +
+                                "_00000000_0000000 \n" +
+                                "_0000000000000000 \n" +
+                                "__00000000000000 \n" +
+                                "____00000000000 \n" +
+                                "_______00000 \n" +
+                                "_________0 \n" +
+                                "________*__000000___00000 \n" +
+                                "_______*__00000000_0000000 \n" +
+                                "______*___0000000000000000 \n" +
+                                "______*____00000000000000 \n" +
+                                "_______*_____00000000000 \n" +
+                                "________*_______00000 \n" +
+                                "_________*________0 \n" +
+                                "_000000___00000___* \n" +
+                                "00000000_0000000___* \n" +
+                                "0000000000000000____* \n" +
+                                "_00000000000000_____* \n" +
+                                "___00000000000_____* \n" +
+                                "______00000_______* \n" +
+                                "________0________* \n" +
+                                "________*__000000___00000 \n" +
+                                "_______*__00000000_0000000 \n" +
+                                "______*___0000000000000000 \n" +
+                                "______*____00000000000000 \n" +
+                                "______*______00000000000 \n" +
+                                "_______*________00000 \n" +
+                                "________*_________0 \n" +
+                                "_________*________* \n" +
+                                "___________________* \n" +
+                                "____________________* \n" +
+                                "_____________________* \n" +
+                                "______________________* \n" +
+                                "_______________________*");
+                    }
+                    if (messageText.matches("Дай ключ")){
+                    sendMessage(chatId, service.getKey().toString());
+                }
+                    //sendMessage(chatId,"иди нахуй");
+//                    if (messageText.matches("(\\d{2}\\.\\d{2}\\.\\d{4}\\s\\d{2}:\\d{2})(\\s+)(.+)")) {
+//                        String dataTime = messageText.substring(0, 16);
+//                        String notificationTask = messageText.substring(17);
+//                        LocalDateTime nowTime = LocalDateTime.now();
+//                        LocalDateTime dataTimeFinal = LocalDateTime.parse(dataTime, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+//                        sendMessage(chatId, "напоминание: " + service.write(chatId, dataTimeFinal, notificationTask).toString()
+//                                + " успешно создано в " + nowTime.getHour() + ":" + nowTime.getMinute() + " "
+//                                + nowTime.getDayOfMonth() + "." + nowTime.getMonthValue() + "." + nowTime.getYear());
+//                    }
             }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
+
+//    @Scheduled(cron = "0 0/1 * * * *")
+//    public void run() {
+//        List<NotificationTask> messages= service.findMessage();
+//        for(NotificationTask e:messages){
+//            sendMessage(e.getChatId(),e.getMessage());
+//        }
+//    }
 
     private void startCommandReceived(Long chatId, String name) {
         String answer = "Hi, " + name + ", nice to meet you!";
         sendMessage(chatId, answer);
     }
 
-    private void sendMessage(Long chatId, String textToSend){
-        SendMessage sendMessage = new SendMessage(String.valueOf(chatId),textToSend);
+    private void sendMessage(Long chatId, String textToSend) {
+        SendMessage sendMessage = new SendMessage(String.valueOf(chatId), textToSend);
         telegramBot.execute(sendMessage);
     }
 
