@@ -2,6 +2,7 @@ package pro.sky.telegrambot.service;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import pro.sky.telegrambot.model.Person;
 import pro.sky.telegrambot.repository.Repository;
 
@@ -43,6 +44,15 @@ public class BotService {
         }
         else{
             return "друг удален";
+        }
+    }
+    public long chatIdFriend(long chatId){
+        Optional<Person> u = repository.findByChatId(chatId);
+        if (u.isEmpty()) {
+            throw new RuntimeException();
+        } else {
+            Person player = u.get();
+            return player.getFriendChatId();
         }
     }
 

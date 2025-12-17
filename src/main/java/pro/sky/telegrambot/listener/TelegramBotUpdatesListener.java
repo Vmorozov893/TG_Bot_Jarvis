@@ -43,7 +43,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     startCommandReceived(chatId, update.message().chat().firstName());
                     break;
                 default:
-                    if (messageText.matches("Иди нахуй")){
+                    if (messageText.compareToIgnoreCase("Иди нахуй")==0) {
                         sendMessage(chatId, "__000000___00000 \n" +
                                 "_00000000_0000000 \n" +
                                 "_0000000000000000 \n" +
@@ -79,17 +79,24 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                                 "______________________* \n" +
                                 "_______________________*");
                     } //сердечки
-                    if (messageText.matches("Дай ключ")){
-                    sendMessage(chatId, service.newPerson(chatId).toString());
+                    else if (messageText.compareToIgnoreCase("дай ключ")==0) {//messageText.matches("Дай ключ")
+                        sendMessage(chatId, service.newPerson(chatId).toString());
                     }
-                    if (messageText.matches("Ключ: (\\d{8})")){
-                        Integer key = Integer.valueOf(messageText.substring(6,14));
-                        sendMessage(chatId, service.friends(chatId,key));
+                    else if (messageText.matches("Ключ: (\\d{8})")) {
+                        Integer key = Integer.valueOf(messageText.substring(6, 14));
+                        sendMessage(chatId, service.friends(chatId, key));
                     }
-                    if (messageText.matches("Удалить друга")) {
+                    else if (messageText.compareToIgnoreCase("Удалить друга")==0) {
                         sendMessage(chatId, service.deleteFriend(chatId));
                     }
-                    //sendMessage(chatId,"иди нахуй");
+                    else if (messageText.matches("^Сообщение для друга: .*")) {
+                        long friendId = service.chatIdFriend(chatId);
+                        String messageForFriend = messageText.substring(21);
+                        sendMessage(friendId, messageForFriend);
+                    }
+                    else {
+                        sendMessage(chatId, "иди нахуй");
+                    }
 //                    if (messageText.matches("(\\d{2}\\.\\d{2}\\.\\d{4}\\s\\d{2}:\\d{2})(\\s+)(.+)")) {
 //                        String dataTime = messageText.substring(0, 16);
 //                        String notificationTask = messageText.substring(17);
