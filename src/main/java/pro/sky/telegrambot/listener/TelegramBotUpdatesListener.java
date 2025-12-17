@@ -78,10 +78,17 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                                 "_____________________* \n" +
                                 "______________________* \n" +
                                 "_______________________*");
-                    }
+                    } //сердечки
                     if (messageText.matches("Дай ключ")){
-                    sendMessage(chatId, service.getKey().toString());
-                }
+                    sendMessage(chatId, service.newPerson(chatId).toString());
+                    }
+                    if (messageText.matches("Ключ: (\\d{8})")){
+                        Integer key = Integer.valueOf(messageText.substring(6,14));
+                        sendMessage(chatId, service.friends(chatId,key));
+                    }
+                    if (messageText.matches("Удалить друга")) {
+                        sendMessage(chatId, service.deleteFriend(chatId));
+                    }
                     //sendMessage(chatId,"иди нахуй");
 //                    if (messageText.matches("(\\d{2}\\.\\d{2}\\.\\d{4}\\s\\d{2}:\\d{2})(\\s+)(.+)")) {
 //                        String dataTime = messageText.substring(0, 16);

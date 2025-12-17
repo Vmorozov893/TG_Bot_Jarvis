@@ -2,10 +2,7 @@ package pro.sky.telegrambot.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Person {
@@ -13,14 +10,16 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //@JoinColumn(name = "Key")
     private Integer key;
 
+    //@JoinColumn(name = "ChatId")
     private long chatId;
 
+    //@JoinColumn(name = "FriendChatId")
     private long friendChatId;
 
-    public Person(Long id, Integer key, long chatId, long friendChatId) {
-        this.id = id;
+    public Person(Integer key, long chatId, long friendChatId) {
         this.key = key;
         this.chatId = chatId;
         this.friendChatId = friendChatId;
